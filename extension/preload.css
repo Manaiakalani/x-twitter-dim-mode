@@ -1,0 +1,16 @@
+/*
+ * X (Twitter) Dim Mode — Preload CSS
+ *
+ * Loaded at document_start before any JS runs.  Sets the html
+ * background to dim-blue while the page bootstraps so there is
+ * no flash of black (Lights Out) or white (Default) background.
+ *
+ * Only activates when the system colour-scheme is dark, which is
+ * the expected state since dim layers on top of Lights Out mode.
+ */
+
+@media (prefers-color-scheme: dark) {
+  html {
+    background-color: hsl(210, 34%, 13%);
+  }
+}

@@ -1,14 +1,13 @@
 {
   "manifest_version": 3,
   "name": "X (Twitter) Dim Mode",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Restores the classic dim mode (dark blue theme) to X/Twitter for a comfortable browsing experience.",
-  "permissions": ["storage", "activeTab"],
-  "host_permissions": ["*://x.com/*", "*://twitter.com/*"],
+  "permissions": ["storage"],
   "content_scripts": [
     {
-      "matches": ["*://x.com/*", "*://twitter.com/*"],
-      "css": ["content.css"],
+      "matches": ["https://x.com/*", "https://twitter.com/*", "https://pro.x.com/*"],
+      "css": ["preload.css", "content.css"],
       "js": ["content.js"],
       "run_at": "document_start"
     }
