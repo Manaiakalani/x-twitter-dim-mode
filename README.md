@@ -34,7 +34,7 @@ Twitter's original dim mode used a soothing dark-blue palette (`#15202B`) instea
 1. **Clone this repository:**
 
    ```bash
-   git clone https://github.com/maximilianstein/x-twitter-dim-mode.git
+   git clone https://github.com/Manaiakalani/x-twitter-dim-mode.git
    ```
 
 2. **Convert to a Safari extension with Xcode:**
