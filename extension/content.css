@@ -1,0 +1,121 @@
+/*
+ * X (Twitter) Dim Mode — Content Stylesheet
+ *
+ * Restores the classic Twitter "Dim" dark-blue palette:
+ *   Primary background : #15202B
+ *   Elevated surfaces  : #1E2732
+ *   Borders            : #38444D
+ *   Primary text       : #D9D9D9
+ *   Secondary text     : #8899A6
+ *   Accent             : #1D9BF0
+ */
+
+/* ── Applied only when the extension activates the class ────────── */
+
+html.xt-dim-mode {
+  color-scheme: dark !important;
+}
+
+/* ── Main background ────────────────────────────────────────────── */
+
+html.xt-dim-mode body,
+html.xt-dim-mode #react-root {
+  background-color: #15202B !important;
+}
+
+/* ── Primary surfaces (columns, cards, modals) ──────────────────── */
+
+html.xt-dim-mode div[data-testid="primaryColumn"],
+html.xt-dim-mode div[data-testid="sidebarColumn"],
+html.xt-dim-mode header[role="banner"],
+html.xt-dim-mode div[aria-label="Timeline: Trending now"],
+html.xt-dim-mode div[data-testid="DMDrawer"],
+html.xt-dim-mode div[role="dialog"],
+html.xt-dim-mode div[data-testid="sheetDialog"] {
+  background-color: #15202B !important;
+}
+
+/* ── Elevated / card surfaces ───────────────────────────────────── */
+
+html.xt-dim-mode div[data-testid="sidebarColumn"] section,
+html.xt-dim-mode div[data-testid="sidebarColumn"] aside,
+html.xt-dim-mode div[data-testid="typeaheadDropdown"],
+html.xt-dim-mode div[role="menu"],
+html.xt-dim-mode div[data-testid="hoverCardParent"],
+html.xt-dim-mode div[data-testid="UserCell"],
+html.xt-dim-mode div[data-testid="toast"] {
+  background-color: #1E2732 !important;
+}
+
+/* ── Borders ────────────────────────────────────────────────────── */
+
+html.xt-dim-mode div[data-testid="primaryColumn"],
+html.xt-dim-mode div[data-testid="sidebarColumn"],
+html.xt-dim-mode div[data-testid="cellInnerDiv"],
+html.xt-dim-mode div[role="separator"] {
+  border-color: #38444D !important;
+}
+
+/* ── Override Twitter's own CSS custom properties ───────────────── */
+
+html.xt-dim-mode {
+  --background-color: #15202B !important;
+  --elevated-background-color: #1E2732 !important;
+  --border-color: #38444D !important;
+  --primary-text-color: #D9D9D9 !important;
+  --secondary-text-color: #8899A6 !important;
+}
+
+/* ── Twitter dynamically applies backgroundColor via inline styles.
+     Use higher-specificity selectors to tame the most common ones. ─ */
+
+html.xt-dim-mode body > div#__next,
+html.xt-dim-mode div[style*="background-color: rgb(0, 0, 0)"],
+html.xt-dim-mode div[style*="background-color: rgb(21, 32, 43)"],
+html.xt-dim-mode div[style*="background-color: rgb(255, 255, 255)"] {
+  background-color: #15202B !important;
+}
+
+/* ── Text colours ───────────────────────────────────────────────── */
+
+html.xt-dim-mode span[style*="color: rgb(231, 233, 234)"],
+html.xt-dim-mode span[style*="color: rgb(15, 20, 25)"] {
+  color: #D9D9D9 !important;
+}
+
+html.xt-dim-mode span[style*="color: rgb(113, 118, 123)"] {
+  color: #8899A6 !important;
+}
+
+/* ── Navigation tab pills & hover ───────────────────────────────── */
+
+html.xt-dim-mode a[role="tab"]:hover,
+html.xt-dim-mode a[role="link"]:hover {
+  background-color: rgba(29, 155, 240, 0.1) !important;
+}
+
+/* ── Compose box / tweet input ──────────────────────────────────── */
+
+html.xt-dim-mode div[data-testid="tweetTextarea_0"],
+html.xt-dim-mode div[role="textbox"] {
+  color: #D9D9D9 !important;
+}
+
+/* ── Scrollbar (WebKit) ─────────────────────────────────────────── */
+
+html.xt-dim-mode ::-webkit-scrollbar {
+  width: 10px;
+}
+
+html.xt-dim-mode ::-webkit-scrollbar-track {
+  background: #15202B;
+}
+
+html.xt-dim-mode ::-webkit-scrollbar-thumb {
+  background: #38444D;
+  border-radius: 5px;
+}
+
+html.xt-dim-mode ::-webkit-scrollbar-thumb:hover {
+  background: #4e5d6c;
+}
