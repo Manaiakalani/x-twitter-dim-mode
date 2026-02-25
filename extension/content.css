@@ -1,36 +1,192 @@
 /*
  * X (Twitter) Dim Mode — Content Stylesheet
  *
- * Works WITH Twitter's own theming instead of brute-forcing colours.
+ * Layers the classic dim (dark-blue) palette on top of X's Lights Out
+ * theme.  All rules are gated behind html.xt-dim-mode so they are
+ * completely inert until the content script adds the class.
  *
- * Strategy:
- *   1. The content script swaps Twitter's runtime background colour on
- *      the <body> from whatever it currently is to #15202B (dim blue).
- *   2. This stylesheet only patches the handful of places the body
- *      colour doesn't automatically cascade into.
- *   3. We avoid [style*=...] selectors entirely — they are too greedy
- *      and break images, buttons, overlays, and embedded media.
- *
- * Classic dim palette reference:
- *   Background  #15202B   Surfaces  #1E2732
- *   Borders     #38444D   Text      #D9D9D9 / #8899A6
- *   Accent      #1D9BF0
+ * Palette:
+ *   Background   hsl(210 34% 13%)   ≈ #15202B
+ *   Hover        hsl(210 25% 16%)
+ *   Elevated     hsl(210 24% 20%)
+ *   Backdrop     hsla(210 34% 13% / 0.85)
+ *   Border       hsl(210 16% 26%)
+ *   Muted text   hsl(210 16% 55%)
+ *   Accent       #1D9BF0
  */
 
-/* ── Only active when the JS adds this class ────────────────────── */
+/* ── Custom properties ──────────────────────────────────────────── */
 
 html.xt-dim-mode {
+  --dim-bg:          hsl(210, 34%, 13%);
+  --dim-bg-hover:    hsl(210, 25%, 16%);
+  --dim-bg-elevated: hsl(210, 24%, 20%);
+  --dim-backdrop:    hsla(210, 34%, 13%, 0.85);
+  --dim-border:      hsl(210, 16%, 26%);
+  --dim-muted:       hsl(210, 16%, 55%);
   color-scheme: dark !important;
 }
 
-/* ── Top-level background ───────────────────────────────────────── */
+/* ── Override X's Lights Out CSS variables ───────────────────────── */
 
-html.xt-dim-mode body {
-  background-color: #15202B !important;
+html.xt-dim-mode body.LightsOut {
+  --color:           210 16% 60%;
+  --border:          210 16% 26%;
+  --input:           210 16% 26%;
+  --border-color:    var(--dim-border);
 }
 
-html.xt-dim-mode #react-root {
-  background-color: #15202B !important;
+/* Tailwind / shadcn variables used in DMs / chat UI */
+html.xt-dim-mode[data-theme="dark"] {
+  --background:        210 34% 13%;
+  --border:            210 16% 26%;
+  --input:             210 16% 26%;
+  --muted-foreground:  210 16% 55%;
+  --color-background:  210 34% 13%;
+  --color-gray-0:      210 34% 13%;
+  --color-gray-50:     210 16% 26%;
+  --color-gray-100:    210 16% 26%;
+  --color-gray-700:    210 16% 60%;
+  --color-gray-800:    210 16% 50%;
+}
+
+/* ── html + body ────────────────────────────────────────────────── */
+
+html.xt-dim-mode,
+html.xt-dim-mode body {
+  background-color: var(--dim-bg) !important;
+}
+
+/* ── Inline black backgrounds ───────────────────────────────────── */
+
+html.xt-dim-mode [style*="background-color: rgb(0, 0, 0)"],
+html.xt-dim-mode [style*="background-color: rgba(0, 0, 0, 1)"] {
+  background-color: var(--dim-bg) !important;
+}
+
+/* Elevated inline surfaces (dark zinc used by cards) */
+html.xt-dim-mode [style*="background-color: rgb(24, 24, 27)"] {
+  background-color: var(--dim-bg-hover) !important;
+}
+
+/* ── X utility classes for black backgrounds ────────────────────── */
+
+html.xt-dim-mode .r-kemksi,
+html.xt-dim-mode .r-1niwhzg,
+html.xt-dim-mode .r-yfoy6g,
+html.xt-dim-mode .r-14lw9ot {
+  background-color: var(--dim-bg) !important;
+}
+
+/* Search bar input — make transparent so the pill's bg shows */
+html.xt-dim-mode form[role="search"] input {
+  background-color: transparent !important;
+}
+
+/* Action-button hover circles — transparent to inherit parent bg */
+html.xt-dim-mode .r-1niwhzg.r-sdzlij {
+  background-color: transparent !important;
+}
+
+/* Timeline top bar (backdrop) */
+html.xt-dim-mode .r-5zmot {
+  background-color: var(--dim-backdrop) !important;
+}
+
+/* Tweet character counter separator */
+html.xt-dim-mode .r-1shrkeu {
+  background-color: var(--dim-border) !important;
+}
+
+/* Sidebar button hover */
+html.xt-dim-mode .r-1hdo0pc {
+  background-color: var(--dim-bg-hover) !important;
+}
+
+/* Secondary background (section cards on Premium, etc.) */
+html.xt-dim-mode .r-g2wdr4 {
+  background-color: var(--dim-bg-hover) !important;
+}
+
+html.xt-dim-mode .r-g2wdr4 [role="link"]:hover {
+  background-color: var(--dim-bg-elevated) !important;
+}
+
+/* Icon containers in menu rows */
+html.xt-dim-mode [role="link"] > div > div:first-child div:has(> svg:only-child) {
+  background-color: var(--dim-bg-elevated) !important;
+}
+
+/* ── Borders ────────────────────────────────────────────────────── */
+
+html.xt-dim-mode .r-1kqtdi0,
+html.xt-dim-mode .r-1roi411 {
+  border-color: var(--dim-border) !important;
+}
+
+html.xt-dim-mode .r-2sztyj {
+  border-top-color: var(--dim-border) !important;
+}
+
+html.xt-dim-mode .r-1igl3o0,
+html.xt-dim-mode .r-rull8r {
+  border-bottom-color: var(--dim-border) !important;
+}
+
+/* Separators / dividers */
+html.xt-dim-mode .r-gu4em3,
+html.xt-dim-mode .r-1bnu78o {
+  background-color: var(--dim-border) !important;
+}
+
+/* ── Text ───────────────────────────────────────────────────────── */
+
+/* Search bar icon, character counter */
+html.xt-dim-mode .r-1bwzh9t {
+  color: var(--dim-muted) !important;
+}
+
+/* "What's happening" placeholder */
+html.xt-dim-mode .draftjs-styles_0 .public-DraftEditorPlaceholder-root,
+html.xt-dim-mode .public-DraftEditorPlaceholder-inner {
+  color: var(--dim-muted) !important;
+}
+
+/* Secondary text (inline style overrides) */
+html.xt-dim-mode [style*="color: rgb(113, 118, 123)"],
+html.xt-dim-mode [style*="-webkit-line-clamp: 3; color: rgb(113, 118, 123)"],
+html.xt-dim-mode [style*="-webkit-line-clamp: 2; color: rgb(113, 118, 123)"] {
+  color: var(--dim-muted) !important;
+}
+
+/* Placeholders */
+html.xt-dim-mode ::placeholder {
+  color: var(--dim-muted) !important;
+}
+
+/* Tailwind classes in chat / DM */
+html.xt-dim-mode .bg-gray-0 {
+  background-color: var(--dim-bg) !important;
+}
+
+html.xt-dim-mode .border-gray-50,
+html.xt-dim-mode .border-gray-100 {
+  border-color: var(--dim-border) !important;
+}
+
+/* Grok active buttons */
+html.xt-dim-mode [style*="border-color: rgb(47, 51, 54)"].r-1che71a {
+  background-color: var(--dim-bg-hover) !important;
+}
+
+/* ── Scanner-applied classes ────────────────────────────────────── */
+
+html.xt-dim-mode .dim-patched {
+  background-color: var(--dim-bg) !important;
+}
+
+html.xt-dim-mode .dim-patched-elevated {
+  background-color: var(--dim-bg-hover) !important;
 }
 
 /* ── Scrollbar (WebKit / Safari) ────────────────────────────────── */
@@ -40,14 +196,14 @@ html.xt-dim-mode ::-webkit-scrollbar {
 }
 
 html.xt-dim-mode ::-webkit-scrollbar-track {
-  background: #15202B;
+  background: var(--dim-bg);
 }
 
 html.xt-dim-mode ::-webkit-scrollbar-thumb {
-  background: #38444D;
+  background: var(--dim-border);
   border-radius: 5px;
 }
 
 html.xt-dim-mode ::-webkit-scrollbar-thumb:hover {
-  background: #4e5d6c;
+  background: hsl(210, 16%, 35%);
 }
