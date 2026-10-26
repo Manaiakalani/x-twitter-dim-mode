@@ -28,9 +28,9 @@ Twitter's original dim mode used a soothing dark-blue palette (`#15202B`) instea
 
 ## Screenshots
 
-| Popup | Dim Mode on X |
-|-------|---------------|
-| _coming soon_ | _coming soon_ |
+| Popup | Dim palette |
+|-------|--------------|
+| ![Toolbar popup, dim mode enabled](docs/popup.png) | ![Dim palette the stylesheet paints over Lights Out](docs/dim-palette.png) |
 
 ## Installation
 
