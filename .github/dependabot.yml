@@ -1,0 +1,8 @@
+# Weekly updates for the GitHub Actions used by this repository.
+# There is no package.json, so the npm ecosystem is not configured.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
