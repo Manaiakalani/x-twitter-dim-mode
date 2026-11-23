@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate extension
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate manifest JSON
+        run: |
+          node <<'EOF'
+          const fs = require("fs");
+          const path = require("path");
+
+          const root = "extension";
+          const manifestPath = path.join(root, "manifest.json");
+          const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+
+          if (manifest.manifest_version !== 3) {
+            throw new Error("manifest_version must be 3");
+          }
+          for (const key of ["name", "version"]) {
+            if (!manifest[key]) {
+              throw new Error("manifest is missing " + key);
+            }
+          }
+
+          const refs = [];
+          for (const entry of manifest.content_scripts || []) {
+            refs.push(...(entry.css || []), ...(entry.js || []));
+          }
+          if (manifest.background && manifest.background.service_worker) {
+            refs.push(manifest.background.service_worker);
+          }
+          if (manifest.action && manifest.action.default_popup) {
+            refs.push(manifest.action.default_popup);
+          }
+          for (const icons of [manifest.icons, manifest.action && manifest.action.default_icon]) {
+            if (icons && typeof icons === "object") {
+              refs.push(...Object.values(icons));
+            }
+          }
+
+          const missing = refs.filter((rel) => !fs.existsSync(path.join(root, rel)));
+          if (missing.length) {
+            throw new Error("manifest references missing files: " + missing.join(", "));
+          }
+
+          console.log("Validated " + manifestPath + " (" + refs.length + " local files present)");
+          EOF
+
+      - name: Check JavaScript syntax
+        run: |
+          set -euo pipefail
+          found=0
+          while IFS= read -r -d '' file; do
+            found=1
+            echo "node --check ${file}"
+            node --check "${file}"
+          done < <(find extension -type f -name '*.js' -print0 | sort -z)
+          if [ "$found" -eq 0 ]; then
+            echo "No JavaScript files found under extension/"
+            exit 1
+          fi
